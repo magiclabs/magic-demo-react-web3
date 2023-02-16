@@ -22,33 +22,28 @@ const TransferToken = () => {
   }, [amount, toAddress]);
 
   const transferTestTokens = () => {
-    try {
-      if (!web3.utils.isAddress(toAddress)) {
-        return setToAddressError(true);
-      }
-      if (isNaN(Number(amount))) {
-        return setAmountError(true);
-      }
-      setDisabled(true);
-      contract.methods
-        .transfer(toAddress, web3.utils.toWei(amount))
-        .send({ from: publicAddress })
-        .on('transactionHash', (hash: string) => {
-          console.log('Transaction hash:', hash);
-        })
-        .then((receipt: any) => {
-          setToAddress('');
-          setAmount('');
-          console.log('Transaction receipt:', receipt);
-        })
-        .catch((error: any) => {
-          setDisabled(false);
-          console.error(error);
-        });
-    } catch (error) {
-      setDisabled(false);
-      console.error(error);
+    if (!web3.utils.isAddress(toAddress)) {
+      return setToAddressError(true);
     }
+    if (isNaN(Number(amount))) {
+      return setAmountError(true);
+    }
+    setDisabled(true);
+    contract.methods
+      .transfer(toAddress, web3.utils.toWei(amount))
+      .send({ from: publicAddress })
+      .on('transactionHash', (hash: string) => {
+        console.log('Transaction hash:', hash);
+      })
+      .then((receipt: any) => {
+        setToAddress('');
+        setAmount('');
+        console.log('Transaction receipt:', receipt);
+      })
+      .catch((error: any) => {
+        setDisabled(false);
+        console.error(error);
+      });
   };
 
   return (

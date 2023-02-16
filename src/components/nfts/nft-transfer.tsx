@@ -22,33 +22,28 @@ const NftTransfer = () => {
   }, [tokenId, toAddress]);
 
   const mintNFT = () => {
-    try {
-      if (!web3.utils.isAddress(toAddress)) {
-        return setToAddressError(true);
-      }
-      if (isNaN(Number(tokenId))) {
-        return setTokenIdError(true);
-      }
-      setDisabled(true);
-      contract.methods
-        .transferFrom(publicAddress, toAddress, tokenId)
-        .send({ from: publicAddress })
-        .on('transactionHash', (hash: string) => {
-          console.log('Transaction hash:', hash);
-        })
-        .then((receipt: any) => {
-          setToAddress('');
-          setTokenId('');
-          console.log('Transaction receipt:', receipt);
-        })
-        .catch((error: any) => {
-          setDisabled(false);
-          console.error(error);
-        });
-    } catch (error) {
-      setDisabled(false);
-      console.error(error);
+    if (!web3.utils.isAddress(toAddress)) {
+      return setToAddressError(true);
     }
+    if (isNaN(Number(tokenId))) {
+      return setTokenIdError(true);
+    }
+    setDisabled(true);
+    contract.methods
+      .transferFrom(publicAddress, toAddress, tokenId)
+      .send({ from: publicAddress })
+      .on('transactionHash', (hash: string) => {
+        console.log('Transaction hash:', hash);
+      })
+      .then((receipt: any) => {
+        setToAddress('');
+        setTokenId('');
+        console.log('Transaction receipt:', receipt);
+      })
+      .catch((error: any) => {
+        setDisabled(false);
+        console.error(error);
+      });
   };
 
   return (

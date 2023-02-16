@@ -25,9 +25,9 @@ export default function Home({ setAccount }: Props) {
       }}
     >
       <AppHeader />
-      <Spacer size={20} />
+      <Spacer size={32} />
       <Links />
-      <Spacer size={78} />
+      <Spacer size={120} />
       <TableOfContents />
       <div className="cards-container">
         <Wallet setAccount={setAccount} />
@@ -37,7 +37,7 @@ export default function Home({ setAccount }: Props) {
         <NFTs />
         <SmartContracts />
         <SigningMethods />
-        <Spacer size={30} />
+        <Spacer size={15} />
         <Links dark />
         <Spacer size={30} />
       </div>

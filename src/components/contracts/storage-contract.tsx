@@ -25,29 +25,24 @@ const StorageContract = () => {
   }, [newNumber]);
 
   const updateNumber = () => {
-    try {
-      if (isNaN(Number(newNumber))) return setNewNumberError(true);
-      setDisabled(true);
-      contract.methods
-        .store(Number(newNumber))
-        .send({ from: publicAddress })
-        .on('transactionHash', (hash: string) => {
-          console.log('Transaction hash:', hash);
-        })
-        .then((receipt: any) => {
-          setNewNumber('');
-          setDisabled(false);
-          getStoredNumber();
-          console.log('Transaction receipt:', receipt);
-        })
-        .catch((error: any) => {
-          console.error(error);
-          setDisabled(false);
-        });
-    } catch (error) {
-      setDisabled(false);
-      console.error(error);
-    }
+    if (isNaN(Number(newNumber))) return setNewNumberError(true);
+    setDisabled(true);
+    contract.methods
+      .store(Number(newNumber))
+      .send({ from: publicAddress })
+      .on('transactionHash', (hash: string) => {
+        console.log('Transaction hash:', hash);
+      })
+      .then((receipt: any) => {
+        setNewNumber('');
+        setDisabled(false);
+        getStoredNumber();
+        console.log('Transaction receipt:', receipt);
+      })
+      .catch((error: any) => {
+        console.error(error);
+        setDisabled(false);
+      });
   };
 
   useEffect(() => {

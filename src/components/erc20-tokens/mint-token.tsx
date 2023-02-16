@@ -9,26 +9,21 @@ const MintToken = () => {
   const contract = getTestTokenContract();
 
   const mintTestTokens = () => {
-    try {
-      setDisabled(true);
-      contract.methods
-        .mint(web3.utils.toWei('10'))
-        .send({ from: publicAddress })
-        .on('transactionHash', (hash: string) => {
-          console.log('Transaction hash:', hash);
-        })
-        .then((receipt: any) => {
-          setDisabled(false);
-          console.log('Transaction receipt:', receipt);
-        })
-        .catch((error: any) => {
-          setDisabled(false);
-          console.error(error);
-        });
-    } catch (error) {
-      setDisabled(false);
-      console.error(error);
-    }
+    setDisabled(true);
+    contract.methods
+      .mint(web3.utils.toWei('10'))
+      .send({ from: publicAddress })
+      .on('transactionHash', (hash: string) => {
+        console.log('Transaction hash:', hash);
+      })
+      .then((receipt: any) => {
+        setDisabled(false);
+        console.log('Transaction receipt:', receipt);
+      })
+      .catch((error: any) => {
+        setDisabled(false);
+        console.error(error);
+      });
   };
 
   return (

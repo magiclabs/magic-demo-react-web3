@@ -5,7 +5,6 @@ const AppHeader = () => {
   return (
     <div style={{ textAlign: 'center' }}>
       <img src={MagicLogo} alt="magic-logo" className="magic-logo" />
-      <h2 className="demo-header">Magic</h2>
       <h3 className="demo-sub-header">Demo</h3>
     </div>
   );

@@ -72,7 +72,7 @@ ul {
 }
 
 .cards-container {
-  margin-top: -342px;
+  margin-top: -378px;
 }
 
 @media only screen and (max-width: 767px) {
@@ -80,7 +80,7 @@ ul {
     display: none;
   }
   .cards-container {
-    margin-top: -54px;
+    margin-top: -89px;
   }
 }
 
@@ -143,19 +143,11 @@ ul {
 }
 
 .magic-logo {
-  margin-top: 40px;
-}
-
-.demo-header {
-  font-weight: 800;
-  font-size: 20px;
-  line-height: 150%;
-  text-align: center;
-  color: #ffffff;
+  margin: 40px 0 15px 0;
 }
 
 .demo-sub-header {
-  color: #ae9fff;
+  color: rgba(255, 255, 255, 0.5);
   margin: 0px;
   font-size: 20px;
   font-weight: 400;
@@ -212,7 +204,7 @@ ul {
 .links {
   display: flex;
   justify-content: center;
-  margin: 20px auto;
+  margin: 20px auto 12px;
   color: #fff;
   font-weight: 600;
 }

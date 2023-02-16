@@ -37,32 +37,27 @@ const SendTransaction = () => {
       return setAmountError(true);
     }
     setDisabled(true);
-    try {
-      const txnParams = {
-        from: publicAddress,
-        to: toAddress,
-        value: web3.utils.toWei(amount, 'ether'),
-        gas: 21000,
-      };
-      web3.eth
-        .sendTransaction(txnParams as any)
-        .on('transactionHash', txHash => {
-          setHash(txHash);
-          console.log('Transaction hash:', txHash);
-        })
-        .then(receipt => {
-          setToAddress('');
-          setAmount('');
-          console.log('Transaction receipt:', receipt);
-        })
-        .catch(error => {
-          console.error(error);
-          setDisabled(false);
-        });
-    } catch (error) {
-      console.error(error);
-      setDisabled(false);
-    }
+    const txnParams = {
+      from: publicAddress,
+      to: toAddress,
+      value: web3.utils.toWei(amount, 'ether'),
+      gas: 21000,
+    };
+    web3.eth
+      .sendTransaction(txnParams as any)
+      .on('transactionHash', txHash => {
+        setHash(txHash);
+        console.log('Transaction hash:', txHash);
+      })
+      .then(receipt => {
+        setToAddress('');
+        setAmount('');
+        console.log('Transaction receipt:', receipt);
+      })
+      .catch(error => {
+        console.error(error);
+        setDisabled(false);
+      });
   };
 
   return (

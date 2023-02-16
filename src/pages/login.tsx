@@ -36,7 +36,7 @@ const Login = ({ setAccount }: Props) => {
       }}
     >
       <AppHeader />
-      <Spacer size={30} />
+      <Spacer size={32} />
       <Network />
       <Spacer size={20} />
       <ConnectButton onClick={connect} disabled={disabled} />
