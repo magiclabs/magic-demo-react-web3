@@ -4,19 +4,28 @@ import FormButton from '../ui/form-button';
 import FormInput from '../ui/form-input';
 import CardLabel from '../ui/card-label';
 import ErrorText from '../ui/error';
-import { getStorageContract } from '../../utils/contracts';
+import { getStorageContractAddress } from '../../utils/contracts';
+import { storageContractAbi } from '../../utils/contract-abis';
+import { useUser } from '../../contexts/UserContext';
+import { useWeb3 } from '../../contexts/Web3Context';
 
 const StorageContract = () => {
+  const { user } = useUser();
+  const { web3 } = useWeb3();
   const [newNumber, setNewNumber] = useState('');
   const [storedNumber, setStoredNumber] = useState('');
   const [disabled, setDisabled] = useState(!newNumber);
   const [newNumberError, setNewNumberError] = useState(false);
-  const publicAddress = localStorage.getItem('user');
-  const contract = getStorageContract();
 
   const getStoredNumber = async () => {
-    const number = await contract.methods.number().call();
-    setStoredNumber(number);
+    try {
+      const contractAddress = getStorageContractAddress();
+      const contract = new web3.eth.Contract(storageContractAbi, contractAddress);
+      const number = await contract.methods.number().call();
+      setStoredNumber(number);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -27,9 +36,11 @@ const StorageContract = () => {
   const updateNumber = () => {
     if (isNaN(Number(newNumber))) return setNewNumberError(true);
     setDisabled(true);
+    const contractAddress = getStorageContractAddress();
+    const contract = new web3.eth.Contract(storageContractAbi, contractAddress);
     contract.methods
       .store(Number(newNumber))
-      .send({ from: publicAddress })
+      .send({ from: user })
       .on('transactionHash', (hash: string) => {
         console.log('Transaction hash:', hash);
       })
@@ -46,8 +57,9 @@ const StorageContract = () => {
   };
 
   useEffect(() => {
+    if (!web3) return;
     getStoredNumber();
-  }, []);
+  }, [web3]);
 
   return (
     <div>

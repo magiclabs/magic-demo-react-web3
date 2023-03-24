@@ -1,7 +1,8 @@
 import { EthNetworkConfiguration, Magic } from 'magic-sdk';
 import { Networks } from '../utils/networks';
+import { thirdPartyWalletOptions } from '../utils/third-party-wallet-options';
 
-const formattedNetwork = (): EthNetworkConfiguration => {
+export const formattedNetwork = (): EthNetworkConfiguration => {
   const network = localStorage.getItem('network');
   switch (network) {
     case Networks.Optimism:
@@ -24,4 +25,5 @@ const formattedNetwork = (): EthNetworkConfiguration => {
 
 export const magic = new Magic(process.env.REACT_APP_MAGIC_API_KEY as string, {
   network: formattedNetwork(),
+  thirdPartyWalletOptions: thirdPartyWalletOptions as any,
 });

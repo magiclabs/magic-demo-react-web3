@@ -34,7 +34,7 @@ export const signTypedDataV3Payload = {
   },
 };
 
-const getChainId = () => {
+export const getChainId = () => {
   const network = localStorage.getItem('network');
   switch (network) {
     case Networks.Polygon:
