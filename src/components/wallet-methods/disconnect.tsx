@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import Loading from '../../images/loading.svg';
-import { useUser } from '../../contexts/UserContext';
-import { useWeb3 } from '../../contexts/Web3Context';
-import { logout } from '../../utils/logout';
+import { magic } from '../../libs/magic';
 
-const Disconnect = () => {
-  const { setUser } = useUser();
-  const { setWeb3 } = useWeb3();
+interface Props {
+  setAccount: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+const Disconnect = ({ setAccount }: Props) => {
   const [disabled, setDisabled] = useState(false);
 
   const disconnect = async () => {
     try {
       setDisabled(true);
-      await logout(setWeb3, setUser);
+      await magic.wallet.disconnect();
+      localStorage.removeItem('user');
+      setDisabled(false);
+      setAccount(null);
     } catch (error) {
       setDisabled(false);
       console.error(error);

@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
 import FormButton from '../ui/form-button';
-import { getTokenContractAddress } from '../../utils/contracts';
-import { magicTestTokenAbi } from '../../utils/contract-abis';
-import { useUser } from '../../contexts/UserContext';
-import { useWeb3 } from '../../contexts/Web3Context';
+import { web3 } from '../../libs/web3';
+import { getTestTokenContract } from '../../utils/contracts';
 
 const MintToken = () => {
-  const { user } = useUser();
-  const { web3 } = useWeb3();
+  const publicAddress = localStorage.getItem('user');
   const [disabled, setDisabled] = useState(false);
+  const contract = getTestTokenContract();
 
   const mintTestTokens = () => {
     setDisabled(true);
-    const contractAddress = getTokenContractAddress();
-    const contract = new web3.eth.Contract(magicTestTokenAbi, contractAddress);
     contract.methods
       .mint(web3.utils.toWei('10'))
-      .send({ from: user })
+      .send({ from: publicAddress })
       .on('transactionHash', (hash: string) => {
         console.log('Transaction hash:', hash);
       })

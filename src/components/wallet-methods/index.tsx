@@ -7,7 +7,11 @@ import Divider from '../ui/divider';
 import Card from '../ui/card';
 import CardHeader from '../ui/card-header';
 
-const WalletMethods = () => {
+interface Props {
+  setAccount: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+const WalletMethods = ({ setAccount }: Props) => {
   return (
     <Card>
       <CardHeader id="wallet-methods">Wallet Methods</CardHeader>
@@ -17,7 +21,7 @@ const WalletMethods = () => {
       <Divider />
       <RequestUserInfo />
       <Divider />
-      <Disconnect />
+      <Disconnect setAccount={setAccount} />
     </Card>
   );
 };

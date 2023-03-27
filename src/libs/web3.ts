@@ -1,7 +1,4 @@
-import Web3 from 'web3';
-import { getProvider } from './provider';
+import Web3 from "web3";
+import { magic } from "./magic";
 
-export const getWeb3 = async () => {
-  const provider = await getProvider();
-  return new Web3(provider);
-};
+export const web3 = new Web3((magic as any).rpcProvider);

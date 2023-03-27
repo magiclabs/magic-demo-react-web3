@@ -3,32 +3,21 @@ import Loading from '../../images/loading.svg';
 import ErrorText from '../ui/error';
 import Spacer from '../ui/spacer';
 import { magic } from '../../libs/magic';
-import { logout } from '../../utils/logout';
-import { useWeb3 } from '../../contexts/Web3Context';
-import { useUser } from '../../contexts/UserContext';
 
 const ShowUI = () => {
-  const { setWeb3 } = useWeb3();
-  const { setUser } = useUser();
   const [disabled, setDisabled] = useState(false);
   const [showUIError, setShowUIError] = useState(false);
 
   const showUI = async () => {
     try {
-      setDisabled(true);
       setShowUIError(false);
       const { walletType } = await magic.wallet.getInfo();
       if (walletType !== 'magic') {
-        setDisabled(false);
-        setShowUIError(true);
-        return;
+        return setShowUIError(true);
       }
-      magic.wallet
-        .showUI()
-        .on('disconnect', () => {
-          logout(setWeb3, setUser);
-        })
-        .then(() => setDisabled(false));
+      setDisabled(true);
+      await magic.wallet.showUI();
+      setDisabled(false);
     } catch (error) {
       setDisabled(false);
       console.error(error);

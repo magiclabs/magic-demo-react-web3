@@ -1,6 +1,8 @@
+import { web3 } from '../libs/web3';
 import { Networks } from './networks';
+import { magicTestTokenAbi, nftAbi, storageContractAbi } from './contract-abis';
 
-export const getStorageContractAddress = () => {
+const getStorageContractAddress = () => {
   const network = localStorage.getItem('network');
   switch (network) {
     case Networks.Polygon:
@@ -12,7 +14,12 @@ export const getStorageContractAddress = () => {
   }
 };
 
-export const getNftContractAddress = () => {
+export const getStorageContract = () => {
+  const contractAddress = getStorageContractAddress();
+  return new web3.eth.Contract(storageContractAbi, contractAddress);
+};
+
+const getNftContractAddress = () => {
   const network = localStorage.getItem('network');
   switch (network) {
     case Networks.Polygon:
@@ -24,7 +31,12 @@ export const getNftContractAddress = () => {
   }
 };
 
-export const getTokenContractAddress = () => {
+export const getNftContract = () => {
+  const contractAddress = getNftContractAddress();
+  return new web3.eth.Contract(nftAbi, contractAddress);
+};
+
+const getTokenContractAddress = () => {
   const network = localStorage.getItem('network');
   switch (network) {
     case Networks.Polygon:
@@ -34,4 +46,9 @@ export const getTokenContractAddress = () => {
     default:
       return '0xB7e7313C95b4dB35aB50760c31f29d1AA4679452';
   }
+};
+
+export const getTestTokenContract = () => {
+  const contractAddress = getTokenContractAddress();
+  return new web3.eth.Contract(magicTestTokenAbi, contractAddress);
 };

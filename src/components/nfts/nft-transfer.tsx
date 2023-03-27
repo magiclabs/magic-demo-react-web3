@@ -3,19 +3,17 @@ import FormButton from '../ui/form-button';
 import FormInput from '../ui/form-input';
 import CardLabel from '../ui/card-label';
 import ErrorText from '../ui/error';
-import { getNftContractAddress } from '../../utils/contracts';
-import { nftAbi } from '../../utils/contract-abis';
-import { useUser } from '../../contexts/UserContext';
-import { useWeb3 } from '../../contexts/Web3Context';
+import { web3 } from '../../libs/web3';
+import { getNftContract } from '../../utils/contracts';
 
 const NftTransfer = () => {
-  const { user } = useUser();
-  const { web3 } = useWeb3();
   const [tokenId, setTokenId] = useState('');
   const [toAddress, setToAddress] = useState('');
   const [disabled, setDisabled] = useState(!tokenId || !toAddress);
   const [toAddressError, setToAddressError] = useState(false);
   const [tokenIdError, setTokenIdError] = useState(false);
+  const contract = getNftContract();
+  const publicAddress = localStorage.getItem('user');
 
   useEffect(() => {
     setDisabled(!toAddress || !tokenId);
@@ -24,14 +22,16 @@ const NftTransfer = () => {
   }, [tokenId, toAddress]);
 
   const mintNFT = () => {
-    if (!web3.utils.isAddress(toAddress)) return setToAddressError(true);
-    if (isNaN(Number(tokenId))) return setTokenIdError(true);
+    if (!web3.utils.isAddress(toAddress)) {
+      return setToAddressError(true);
+    }
+    if (isNaN(Number(tokenId))) {
+      return setTokenIdError(true);
+    }
     setDisabled(true);
-    const contractAddress = getNftContractAddress();
-    const contract = new web3.eth.Contract(nftAbi, contractAddress);
     contract.methods
-      .transferFrom(user, toAddress, tokenId)
-      .send({ from: user })
+      .transferFrom(publicAddress, toAddress, tokenId)
+      .send({ from: publicAddress })
       .on('transactionHash', (hash: string) => {
         console.log('Transaction hash:', hash);
       })

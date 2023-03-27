@@ -13,7 +13,6 @@ const GetWalletInfo = () => {
       setDisabled(true);
       const walletInfo = await magic.wallet.getInfo();
       setDisabled(false);
-      console.log(walletInfo);
       setWalletType(walletInfo.walletType);
       setShowToast(true);
       setTimeout(() => {

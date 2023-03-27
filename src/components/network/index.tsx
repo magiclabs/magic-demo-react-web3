@@ -8,7 +8,6 @@ const Network = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [network, setNetwork] = useState(localStorage.getItem('network') || Networks.Ethereum);
 
-  // Refresh page when new network is selected
   const handleNetworkSelected = (networkOption: Networks) => {
     if (networkOption !== network) {
       setNetwork(networkOption);

@@ -8,20 +8,18 @@ import Card from '../ui/card';
 import CardHeader from '../ui/card-header';
 import TransactionHistory from '../ui/transaction-history';
 import ErrorText from '../ui/error';
+import { web3 } from '../../libs/web3';
 import { Networks } from '../../utils/networks';
 import { getFaucetUrl } from '../../utils/faucet';
-import { useUser } from '../../contexts/UserContext';
-import { useWeb3 } from '../../contexts/Web3Context';
 
 const SendTransaction = () => {
-  const { user } = useUser();
-  const { web3 } = useWeb3();
   const [toAddress, setToAddress] = useState('');
   const [amount, setAmount] = useState('');
   const [disabled, setDisabled] = useState(!toAddress || !amount);
   const [hash, setHash] = useState('');
   const [toAddressError, setToAddressError] = useState(false);
   const [amountError, setAmountError] = useState(false);
+  const publicAddress = localStorage.getItem('user');
   const network = localStorage.getItem('network');
   const tokenSymbol = network === Networks.Polygon ? 'MATIC' : 'ETH';
 
@@ -32,27 +30,31 @@ const SendTransaction = () => {
   }, [amount, toAddress]);
 
   const sendTransaction = () => {
-    if (!web3.utils.isAddress(toAddress)) return setToAddressError(true);
-    if (isNaN(Number(amount))) return setAmountError(true);
+    if (!web3.utils.isAddress(toAddress)) {
+      return setToAddressError(true);
+    }
+    if (isNaN(Number(amount))) {
+      return setAmountError(true);
+    }
     setDisabled(true);
     const txnParams = {
-      from: user,
+      from: publicAddress,
       to: toAddress,
       value: web3.utils.toWei(amount, 'ether'),
       gas: 21000,
     };
     web3.eth
       .sendTransaction(txnParams as any)
-      .on('transactionHash', (txHash: string) => {
+      .on('transactionHash', txHash => {
         setHash(txHash);
         console.log('Transaction hash:', txHash);
       })
-      .then((receipt: any) => {
+      .then(receipt => {
         setToAddress('');
         setAmount('');
         console.log('Transaction receipt:', receipt);
       })
-      .catch((error: any) => {
+      .catch(error => {
         console.error(error);
         setDisabled(false);
       });

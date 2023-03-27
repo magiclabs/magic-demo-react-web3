@@ -1,28 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Divider from '../ui/divider';
 import Loading from '../../images/loading.svg';
 import Network from '../network';
 import CardLabel from '../ui/card-label';
 import Card from '../ui/card';
 import CardHeader from '../ui/card-header';
+import { magic } from '../../libs/magic';
+import { web3 } from '../../libs/web3';
 import { Networks } from '../../utils/networks';
-import { useUser } from '../../contexts/UserContext';
-import { useWeb3 } from '../../contexts/Web3Context';
-import { logout } from '../../utils/logout';
 
-const UserInfo = () => {
-  const { user, setUser } = useUser();
-  const { web3, setWeb3 } = useWeb3();
+interface Props {
+  setAccount: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+const UserInfo = ({ setAccount }: Props) => {
   const [balance, setBalance] = useState('...');
   const [copied, setCopied] = useState('Copy');
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const publicAddress = localStorage.getItem('user');
   const network = localStorage.getItem('network');
   const tokenSymbol = network === Networks.Polygon ? 'MATIC' : 'ETH';
 
+  const disconnect = async () => {
+    await magic.wallet.disconnect();
+    localStorage.removeItem('user');
+    setAccount(null);
+  };
+
   const copy = () => {
-    if (user && copied === 'Copy') {
+    if (publicAddress && copied === 'Copy') {
       setCopied('Copied!');
-      navigator.clipboard.writeText(user);
+      navigator.clipboard.writeText(publicAddress);
       setTimeout(() => {
         setCopied('Copy');
       }, 1000);
@@ -30,29 +39,20 @@ const UserInfo = () => {
   };
 
   const getBalance = async () => {
-    if (user && web3) {
-      try {
-        const balance = await web3.eth.getBalance(user);
-        setBalance(web3.utils.fromWei(balance));
-      } catch (error) {
-        console.error(error);
-      }
+    if (publicAddress) {
+      const balance = await web3.eth.getBalance(publicAddress);
+      setBalance(web3.utils.fromWei(balance));
     }
   };
 
   useEffect(() => {
-    if (!web3 || !user) return;
     getBalance();
-  }, [web3, user]);
+  }, []);
 
   return (
     <Card>
       <CardHeader id="wallet">Wallet</CardHeader>
-      <CardLabel
-        leftHeader="Status"
-        rightAction={<div onClick={() => logout(setWeb3, setUser)}>Disconnect</div>}
-        isDisconnect
-      />
+      <CardLabel leftHeader="Status" rightAction={<div onClick={disconnect}>Disconnect</div>} isDisconnect />
       <div className="flex-row">
         <div className="green-dot" />
         <div className="connected">Connected</div>
@@ -62,7 +62,7 @@ const UserInfo = () => {
       <Network />
       <Divider />
       <CardLabel leftHeader="Address" rightAction={<div onClick={copy}>{copied}</div>} />
-      <div className="code">{user}</div>
+      <div className="code">{publicAddress}</div>
       <Divider />
       <CardLabel
         style={{ height: '20px' }}

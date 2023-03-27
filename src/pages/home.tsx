@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import TableOfContents from '../components/table-of-contents';
 import AppHeader from '../components/app-header';
 import Wallet from '../components/wallet';
@@ -11,74 +11,12 @@ import NFTs from '../components/nfts';
 import Links from '../components/links';
 import Spacer from '../components/ui/spacer';
 import HomePageBackground from '../images/main.svg';
-import { Networks } from '../utils/networks';
-import { useWeb3 } from '../contexts/Web3Context';
-import { useUser } from '../contexts/UserContext';
-import { logout } from '../utils/logout';
 
-export default function Home() {
-  const { user, setUser } = useUser();
-  const { web3, setWeb3 } = useWeb3();
-  const [isWrongNetwork, setIsWrongNetwork] = useState(false);
-  const [userChainId, setUserChainId] = useState();
-  const network = (localStorage.getItem('network') as Networks) || Networks.Ethereum;
+interface Props {
+  setAccount: React.Dispatch<React.SetStateAction<string | null>>;
+}
 
-  // Update state for newly connected wallet
-  const handleDisconnect = () => {
-    logout(setWeb3, setUser);
-  };
-
-  // Update state for newly connected wallet
-  const handleAccountsChanged = (acc: any) => {
-    console.log('New account:', acc);
-    // If user disconnected wallet, logout & reset web3
-    if (!acc[0]) {
-      handleDisconnect();
-    } else {
-      localStorage.setItem('user', acc[0]);
-      setUser(acc[0]);
-    }
-  };
-
-  // Refresh the page when a user changes networks,
-  const handleChainChanged = () => {
-    window.location.reload();
-  };
-
-  useEffect(() => {
-    if (!web3 || !user) return;
-    // Once a user is connected, check if the wallet is on the correct network
-    (async function () {
-      const userWalletChainId = await web3.eth.getChainId();
-      setUserChainId(userWalletChainId);
-      const dappChainId = getChainIdForSetNetwork();
-      if (Number(userWalletChainId) !== dappChainId) {
-        setIsWrongNetwork(true);
-      }
-    })();
-
-    // Listen for events emitted by third party wallets
-    web3.currentProvider.on('accountsChanged', handleAccountsChanged);
-    web3.currentProvider.on('chainChanged', handleChainChanged);
-    web3.currentProvider.on('disconnect', handleDisconnect);
-    return () => {
-      web3?.currentProvider?.removeListener('accountsChanged', handleAccountsChanged);
-      web3?.currentProvider?.removeListener('chainChanged', handleChainChanged);
-      web3?.currentProvider.removeListener('disconnect', handleDisconnect);
-    };
-  }, [web3, user]);
-
-  const getChainIdForSetNetwork = () => {
-    switch (network) {
-      case Networks.Polygon:
-        return 80001;
-      case Networks.Optimism:
-        return 420;
-      default:
-        return 5;
-    }
-  };
-
+export default function Home({ setAccount }: Props) {
   return (
     <div
       className="home-page"
@@ -86,26 +24,20 @@ export default function Home() {
         backgroundImage: `url(${HomePageBackground})`,
       }}
     >
-      {isWrongNetwork ? (
-        <div className="wrong-network-banner">
-          Connected wallet is on the wrong network - chain Id: {userChainId}. <br />
-          Switch to {network} - chain Id: {getChainIdForSetNetwork()}
-        </div>
-      ) : null}
       <AppHeader />
-      <Spacer size={20} />
+      <Spacer size={32} />
       <Links />
-      <Spacer size={125} />
+      <Spacer size={120} />
       <TableOfContents />
       <div className="cards-container">
-        <Wallet />
-        <WalletMethods />
+        <Wallet setAccount={setAccount} />
+        <WalletMethods setAccount={setAccount} />
         <SendTransaction />
         <Erc20Tokens />
         <NFTs />
         <SmartContracts />
         <SigningMethods />
-        <Spacer size={30} />
+        <Spacer size={15} />
         <Links dark />
         <Spacer size={30} />
       </div>
