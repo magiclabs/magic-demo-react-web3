@@ -8,6 +8,6 @@ export const getFaucetUrl = () => {
     case Networks.Optimism:
       return 'https://community.optimism.io/docs/useful-tools/faucets/';
     default:
-      return 'https://goerlifaucet.com/';
+      return 'https://sepoliafaucet.com/';
   }
 };

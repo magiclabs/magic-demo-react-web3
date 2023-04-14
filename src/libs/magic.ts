@@ -17,7 +17,7 @@ const formattedNetwork = (): EthNetworkConfiguration => {
     default:
       return {
         rpcUrl: process.env.REACT_APP_ETHEREUM_RPC_URL as string,
-        chainId: 5,
+        chainId: 11155111,
       };
   }
 };

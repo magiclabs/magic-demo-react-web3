@@ -2,19 +2,21 @@ import React, { useState } from 'react';
 import { recoverTypedSignature, SignTypedDataVersion } from '@metamask/eth-sig-util';
 import FormButton from '../ui/form-button';
 import CardLabel from '../ui/card-label';
-import { magic } from '../../libs/magic';
 import { signTypedDataV3Payload } from '../../utils/signTypedData-payload';
+import { useUser } from '../../contexts/UserContext';
+import { useWeb3 } from '../../contexts/Web3Context';
 
 const SignTypedDataV3 = () => {
+  const { user } = useUser();
+  const { web3 } = useWeb3();
   const [disabled, setDisabled] = useState(false);
-  const publicAddress = localStorage.getItem('user');
 
   const signTypedDataV3 = async () => {
     try {
       setDisabled(true);
-      const params = [publicAddress, signTypedDataV3Payload];
+      const params = [user, JSON.stringify(signTypedDataV3Payload)];
       const method = 'eth_signTypedData_v3';
-      const signature = await magic.rpcProvider.request({
+      const signature = await web3.currentProvider.request({
         method,
         params,
       });
@@ -24,12 +26,8 @@ const SignTypedDataV3 = () => {
         signature,
         version: SignTypedDataVersion.V3,
       });
-      console.log('recoveredAddress', recoveredAddress.toLocaleLowerCase());
-      console.log('publicAddress', publicAddress?.toLocaleLowerCase());
       console.log(
-        recoveredAddress.toLocaleLowerCase() === publicAddress?.toLocaleLowerCase()
-          ? 'Signing success!'
-          : 'Signing failed!',
+        recoveredAddress.toLocaleLowerCase() === user?.toLocaleLowerCase() ? 'Signing success!' : 'Signing failed!',
       );
       setDisabled(false);
     } catch (error) {

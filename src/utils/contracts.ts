@@ -1,8 +1,6 @@
-import { web3 } from '../libs/web3';
 import { Networks } from './networks';
-import { magicTestTokenAbi, nftAbi, storageContractAbi } from './contract-abis';
 
-const getStorageContractAddress = () => {
+export const getStorageContractAddress = () => {
   const network = localStorage.getItem('network');
   switch (network) {
     case Networks.Polygon:
@@ -10,16 +8,11 @@ const getStorageContractAddress = () => {
     case Networks.Optimism:
       return '0xB7e7313C95b4dB35aB50760c31f29d1AA4679452';
     default:
-      return '0xb57a27201b207E01c2b6781AB18fe1faA924f5CC';
+      return '0x97bA865Df5a937095285e99bA22189E4B3BDBd1f';
   }
 };
 
-export const getStorageContract = () => {
-  const contractAddress = getStorageContractAddress();
-  return new web3.eth.Contract(storageContractAbi, contractAddress);
-};
-
-const getNftContractAddress = () => {
+export const getNftContractAddress = () => {
   const network = localStorage.getItem('network');
   switch (network) {
     case Networks.Polygon:
@@ -27,16 +20,11 @@ const getNftContractAddress = () => {
     case Networks.Optimism:
       return '0xb57a27201b207E01c2b6781AB18fe1faA924f5CC';
     default:
-      return '0x5Dfec61174fbC58C2b265044F90EE12418FA011c';
+      return '0xC38581C335E76E78541B79ade04eAE205704248F';
   }
 };
 
-export const getNftContract = () => {
-  const contractAddress = getNftContractAddress();
-  return new web3.eth.Contract(nftAbi, contractAddress);
-};
-
-const getTokenContractAddress = () => {
+export const getTokenContractAddress = () => {
   const network = localStorage.getItem('network');
   switch (network) {
     case Networks.Polygon:
@@ -44,11 +32,6 @@ const getTokenContractAddress = () => {
     case Networks.Optimism:
       return '0x5Dfec61174fbC58C2b265044F90EE12418FA011c';
     default:
-      return '0xB7e7313C95b4dB35aB50760c31f29d1AA4679452';
+      return '0x3e21cB8759CE81e6bdC1295E8E2081C4e64e488f';
   }
-};
-
-export const getTestTokenContract = () => {
-  const contractAddress = getTokenContractAddress();
-  return new web3.eth.Contract(magicTestTokenAbi, contractAddress);
 };
