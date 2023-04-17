@@ -1,5 +1,6 @@
 export enum Networks {
-  Ethereum = 'Ethereum (Sepolia)',
+  Sepolia = 'Ethereum (Sepolia)',
+  Goerli = 'Ethereum (Goerli)',
   Polygon = 'Polygon (Mumbai)',
   Optimism = 'Optimism (Goerli)',
 }

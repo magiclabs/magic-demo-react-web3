@@ -41,6 +41,8 @@ const getChainId = () => {
       return 80001;
     case Networks.Optimism:
       return 420;
+    case Networks.Goerli:
+      return 5;
     default:
       return 11155111;
   }
