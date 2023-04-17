@@ -1,25 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import Loading from '../../images/loading.svg';
 import CardLabel from '../ui/card-label';
-import { web3 } from '../../libs/web3';
-import { getTestTokenContract } from '../../utils/contracts';
+import { getTokenContractAddress } from '../../utils/contracts';
+import { magicTestTokenAbi } from '../../utils/contract-abis';
+import { useUser } from '../../contexts/UserContext';
+import { useWeb3 } from '../../contexts/Web3Context';
 
 const TokenBalance = () => {
+  const { user } = useUser();
+  const { web3 } = useWeb3();
   const [balance, setBalance] = useState('0');
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const publicAddress = localStorage.getItem('user');
-  const contract = getTestTokenContract();
 
   const getTestTokenBalance = async () => {
     if (!isRefreshing) {
-      const balance = await contract.methods.balanceOf(publicAddress).call();
+      const contractAddress = getTokenContractAddress();
+      const contract = new web3.eth.Contract(magicTestTokenAbi, contractAddress);
+      const balance = await contract.methods.balanceOf(user).call();
       setBalance(web3.utils.fromWei(balance));
     }
   };
 
   useEffect(() => {
+    if (!user || !web3) return;
     getTestTokenBalance();
-  }, []);
+  }, [user, web3]);
 
   return (
     <div>

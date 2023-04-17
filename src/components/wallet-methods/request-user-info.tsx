@@ -11,7 +11,11 @@ const RequestUserInfo = () => {
   const requestUserInfo = async () => {
     try {
       setDisabled(true);
-      const userInfo = await magic.wallet.requestUserInfoWithUI();
+      const userInfo = await magic.wallet.requestUserInfoWithUI({
+        scope: {
+          email: 'optional',
+        },
+      });
       setDisabled(false);
       setEmail(userInfo.email);
       setShowToast(true);

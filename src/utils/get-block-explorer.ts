@@ -8,6 +8,6 @@ export const getBlockExplorer = () => {
     case Networks.Optimism:
       return 'https://blockscout.com/optimism/goerli/';
     default:
-      return 'https://goerli.etherscan.io/';
+      return 'https://sepolia.etherscan.io/';
   }
 };

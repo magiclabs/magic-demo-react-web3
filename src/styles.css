@@ -72,7 +72,7 @@ ul {
 }
 
 .cards-container {
-  margin-top: -378px;
+  margin-top: -385px;
 }
 
 @media only screen and (max-width: 767px) {
@@ -80,7 +80,7 @@ ul {
     display: none;
   }
   .cards-container {
-    margin-top: -89px;
+    margin-top: -90px;
   }
 }
 
@@ -143,12 +143,12 @@ ul {
 }
 
 .magic-logo {
-  margin: 40px 0 15px 0;
+  margin-top: 40px;
 }
 
 .demo-sub-header {
-  color: rgba(255, 255, 255, 0.5);
-  margin: 0px;
+  color: #ae9fff;
+  margin: 15px 0 0 0;
   font-size: 20px;
   font-weight: 400;
   font-family: monospace;
@@ -204,7 +204,7 @@ ul {
 .links {
   display: flex;
   justify-content: center;
-  margin: 20px auto 12px;
+  margin: 20px auto;
   color: #fff;
   font-weight: 600;
 }
@@ -471,4 +471,14 @@ ul {
 
 a {
   all: unset;
+}
+
+.wrong-network-banner {
+  top: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
+  background-color: rgb(255, 182, 182);
+  text-align: center;
+  padding: 10px;
 }

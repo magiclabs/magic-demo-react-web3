@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Buffer } from 'buffer';
 import { recoverPersonalSignature } from '@metamask/eth-sig-util';
 import FormButton from '../ui/form-button';
 import FormInput from '../ui/form-input';
 import CardLabel from '../ui/card-label';
-import { web3 } from '../../libs/web3';
+import { useUser } from '../../contexts/UserContext';
+import { useWeb3 } from '../../contexts/Web3Context';
 
 const PersonalSign = () => {
-  window.Buffer = window.Buffer || Buffer;
-  const publicAddress = localStorage.getItem('user');
+  const { user } = useUser();
+  const { web3 } = useWeb3();
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(!message);
 
@@ -18,18 +18,16 @@ const PersonalSign = () => {
 
   const personalSign = async () => {
     try {
-      if (publicAddress) {
+      if (user) {
         setDisabled(true);
-        const signedMessage = await web3.eth.personal.sign(message, publicAddress, '');
+        const signedMessage = await web3.eth.personal.sign(message, user);
         console.log('signedMessage:', signedMessage);
         const recoveredAddress = recoverPersonalSignature({
           data: message,
           signature: signedMessage,
         });
         console.log(
-          recoveredAddress.toLocaleLowerCase() === publicAddress?.toLocaleLowerCase()
-            ? 'Signing success!'
-            : 'Signing failed!',
+          recoveredAddress.toLocaleLowerCase() === user?.toLocaleLowerCase() ? 'Signing success!' : 'Signing failed!',
         );
         setMessage('');
         setDisabled(false);

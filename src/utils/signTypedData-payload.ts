@@ -42,7 +42,7 @@ const getChainId = () => {
     case Networks.Optimism:
       return 420;
     default:
-      return 5;
+      return 11155111;
   }
 };
 

@@ -9,7 +9,7 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "buffer": "^6.0.3",
-    "magic-sdk": "^13.2.0",
+    "magic-sdk": "17.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "4.0.3",
@@ -41,8 +41,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "engines": {
-    "node": "16.x"
   }
 }

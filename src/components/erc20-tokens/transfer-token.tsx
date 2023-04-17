@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react';
 import FormButton from '../ui/form-button';
 import FormInput from '../ui/form-input';
 import CardLabel from '../ui/card-label';
-import { web3 } from '../../libs/web3';
-import { getTestTokenContract } from '../../utils/contracts';
 import ErrorText from '../ui/error';
+import { getTokenContractAddress } from '../../utils/contracts';
+import { magicTestTokenAbi } from '../../utils/contract-abis';
+import { useUser } from '../../contexts/UserContext';
+import { useWeb3 } from '../../contexts/Web3Context';
 
 const TransferToken = () => {
+  const { user } = useUser();
+  const { web3 } = useWeb3();
   const [toAddress, setToAddress] = useState('');
   const [amount, setAmount] = useState('');
   const [disabled, setDisabled] = useState(!toAddress || !amount);
   const [toAddressError, setToAddressError] = useState(false);
   const [amountError, setAmountError] = useState(false);
-  const publicAddress = localStorage.getItem('user');
-  const contract = getTestTokenContract();
 
   useEffect(() => {
     setDisabled(!toAddress || !amount);
@@ -22,16 +24,14 @@ const TransferToken = () => {
   }, [amount, toAddress]);
 
   const transferTestTokens = () => {
-    if (!web3.utils.isAddress(toAddress)) {
-      return setToAddressError(true);
-    }
-    if (isNaN(Number(amount))) {
-      return setAmountError(true);
-    }
+    if (!web3.utils.isAddress(toAddress)) return setToAddressError(true);
+    if (isNaN(Number(amount))) return setAmountError(true);
     setDisabled(true);
+    const contractAddress = getTokenContractAddress();
+    const contract = new web3.eth.Contract(magicTestTokenAbi, contractAddress);
     contract.methods
       .transfer(toAddress, web3.utils.toWei(amount))
-      .send({ from: publicAddress })
+      .send({ from: user })
       .on('transactionHash', (hash: string) => {
         console.log('Transaction hash:', hash);
       })

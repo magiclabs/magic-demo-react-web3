@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Login from './pages/login';
 import Home from './pages/home';
+import { useUser } from './contexts/UserContext';
 import './styles.css';
 
 export default function App() {
-  const [account, setAccount] = useState<string | null>(localStorage.getItem('user'));
-  return !account ? <Login setAccount={setAccount} /> : <Home setAccount={setAccount} />;
+  const { user } = useUser();
+
+  return !user ? <Login /> : <Home />;
 }
