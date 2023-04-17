@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import TableOfContents from '../components/table-of-contents';
 import AppHeader from '../components/app-header';
 import Wallet from '../components/wallet';
@@ -19,9 +19,7 @@ import { logout } from '../utils/logout';
 export default function Home() {
   const { user, setUser } = useUser();
   const { web3, setWeb3 } = useWeb3();
-  // const [isWrongNetwork, setIsWrongNetwork] = useState(false);
-  // const [userChainId, setUserChainId] = useState();
-  const network = (localStorage.getItem('network') as Networks) || Networks.Ethereum;
+  const network = (localStorage.getItem('network') as Networks) || Networks.Sepolia;
 
   // Update state for newly connected wallet
   const handleDisconnect = () => {
@@ -71,6 +69,8 @@ export default function Home() {
         return 80001;
       case Networks.Optimism:
         return 420;
+      case Networks.Goerli:
+        return 5;
       default:
         return 11155111;
     }

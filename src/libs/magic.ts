@@ -14,9 +14,14 @@ const formattedNetwork = (): EthNetworkConfiguration => {
         rpcUrl: process.env.REACT_APP_POLYGON_RPC_URL as string,
         chainId: 80001,
       };
+    case Networks.Goerli:
+      return {
+        rpcUrl: process.env.REACT_APP_GOERLI_RPC_URL as string,
+        chainId: 5,
+      };
     default:
       return {
-        rpcUrl: process.env.REACT_APP_ETHEREUM_RPC_URL as string,
+        rpcUrl: process.env.REACT_APP_SEPOLIA_RPC_URL as string,
         chainId: 11155111,
       };
   }

@@ -34,7 +34,7 @@ const SendTransaction = () => {
   const sendTransaction = () => {
     if (!web3.utils.isAddress(toAddress)) return setToAddressError(true);
     if (isNaN(Number(amount))) return setAmountError(true);
-    // setDisabled(true);
+    setDisabled(true);
     const txnParams = {
       from: user,
       to: toAddress,
@@ -54,7 +54,7 @@ const SendTransaction = () => {
       })
       .catch((error: any) => {
         console.error(error);
-        // setDisabled(false);
+        setDisabled(false);
       });
   };
 

@@ -4,9 +4,9 @@ import Check from '../../images/check.svg';
 import { Networks } from '../../utils/networks';
 
 const Network = () => {
-  const networkOptions = [Networks.Ethereum, Networks.Polygon, Networks.Optimism];
+  const networkOptions = [Networks.Sepolia, Networks.Goerli, Networks.Polygon, Networks.Optimism];
   const [isOpen, setIsOpen] = useState(false);
-  const [network, setNetwork] = useState(localStorage.getItem('network') || Networks.Ethereum);
+  const [network, setNetwork] = useState(localStorage.getItem('network') || Networks.Sepolia);
 
   const handleNetworkSelected = (networkOption: Networks) => {
     if (networkOption !== network) {
