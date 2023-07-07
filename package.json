@@ -9,7 +9,7 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "buffer": "^6.0.3",
-    "magic-sdk": "17.0.0",
+    "magic-sdk": "18.2.2-canary.561.5479751698.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "4.0.3",
